@@ -25,7 +25,7 @@ public class Streamer extends AbstractActor {
                 .match(StreamRequest.class, request -> {
                     List<StreamResponse> streamResponses = BooksRepository.getInstance().getContent(request.getTitle());
                     final Source<StreamResponse, NotUsed> source = Source.from(streamResponses);
-                    final Sink<StreamResponse, NotUsed> sinkPrint = Sink.actorRef(sender(), Done.getInstance());
+                    final Sink<StreamResponse, NotUsed> sinkPrint = Sink.actorRef(sender(), new StreamResponse(request.getTitle(), "DONE"));
                     source.throttle(1, Duration.create(1, TimeUnit.SECONDS), 1, ThrottleMode.shaping()).runWith(sinkPrint, materializer);
                     context().stop(self());
                 })

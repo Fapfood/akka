@@ -30,9 +30,8 @@ public class SearchersSupervisor extends AbstractActor {
                     if (received) {
                         context().stop(self());
                     } else {
-                        if(response.getTitle() != null)
-                            sender().tell(response, null);
-                            received = true;
+                        sender().tell(response, null);
+                        received = true;
                     }
                 })
                 .matchAny(o -> System.out.println("received unknown message"))
